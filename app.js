@@ -41,6 +41,9 @@ app.use(chat)
 const videoTracker= require('./routers/videoTracker');
 app.use(videoTracker)
 
+const userAttempt = require('./routers/userAttempt');
+app.use(userAttempt);
+
 app.listen(port,function(){
   console.log("Started on PORT 3000");
 })

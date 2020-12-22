@@ -1,6 +1,8 @@
-const mongoose = require('mongoose')
-
-// const khcInventory= require('../models/khc')
-mongoose.connect('mongodb+srv://imsHP:imsHP@cluster0-exoql.mongodb.net/test?retryWrites=true&w=majority',{
-	useNewUrlParser: true, 
-	useCreateIndex: true})
+const mongoose = require('mongoose');
+mongoose.connect(
+  'mongodb+srv://raushan303:8800903453@cluster0.s9gwb.mongodb.net/base?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  }
+);
