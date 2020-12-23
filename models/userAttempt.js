@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
-const userattempt=mongoose.model('userattempt',{
-	user:{
-		type:String,
-	},
-	attempt:{
-		type:[],
-	}
-})
+const mongoose = require('mongoose');
+const userattempt = mongoose.model('userattempt', {
+  user: {
+    type: String,
+  },
+  attempt: {
+    type: [],
+  },
+});
 
-module.exports = userattempt
+module.exports = userattempt;
