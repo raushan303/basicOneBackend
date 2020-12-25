@@ -1,66 +1,66 @@
 const mongoose = require('mongoose');
 const subject = mongoose.model('subject', {
-  id: { type: String },
-  subjectName: { type: String },
-  grade: { type: String },
-  chapterCount: { type: Number },
-  videoCount: { type: Number },
-  videoMins: { type: Number },
-  questionCount: { type: Number },
+  id: { type: String, default: null },
+  subjectName: { type: String, required: true },
+  grade: { type: String, required: true },
+  chapterCount: { type: Number, default: 0 },
+  videoCount: { type: Number, default: 0 },
+  videoMins: { type: Number, default: 0 },
+  questionCount: { type: Number, default: 0 },
 });
 
 const chapter = mongoose.model('chapter', {
-  id: { type: String },
-  subjectName: { type: String },
-  chapterName: { type: String },
-  grade: { type: String },
-  topicCount: { type: Number },
-  videoCount: { type: Number },
-  videoMins: { type: Number },
-  questionCount: { type: Number },
+  id: { type: String, default: null },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  grade: { type: String, required: true },
+  topicCount: { type: Number, default: 0 },
+  videoCount: { type: Number, default: 0 },
+  videoMins: { type: Number, default: 0 },
+  questionCount: { type: Number, default: 0 },
 });
 
 const topic = mongoose.model('topic', {
-  id: { type: String },
-  subjectName: { type: String },
-  chapterName: { type: String },
-  topicName: { type: String },
-  grade: { type: String },
-  conceptCount: { type: Number },
-  videoCount: { type: Number },
-  videoMins: { type: Number },
-  questionCount: { type: Number },
+  id: { type: String, default: null },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  topicName: { type: String, required: true },
+  grade: { type: String, required: true },
+  conceptCount: { type: Number, default: 0 },
+  videoCount: { type: Number, default: 0 },
+  videoMins: { type: Number, default: 0 },
+  questionCount: { type: Number, default: 0 },
 });
 
 const subtopic = mongoose.model('subtopic', {
-  id: { type: String },
-  url: { type: String },
-  subjectName: { type: String },
-  chapterName: { type: String },
-  topicName: { type: String },
-  subtopicName: { type: String },
-  grade: { type: String },
-  videoMins: { type: Number },
+  id: { type: String, default: null },
+  url: { type: String, required: true },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  topicName: { type: String, required: true },
+  subtopicName: { type: String, required: true },
+  grade: { type: String, required: true },
+  videoMins: { type: Number, required: true },
 });
 
 const question = mongoose.model('question', {
-  id: { type: String },
-  question: { type: String },
-  options: { type: [] },
-  answer: { type: String },
-  note: { type: String },
-  subjectName: { type: String },
-  chapterName: { type: String },
-  topicName: { type: String },
-  subtopicName: { type: String },
-  grade: { type: String },
-  videoMins: { type: Number },
+  id: { type: String, default: null },
+  question: { type: String, required: true },
+  options: { type: Array, required: true },
+  answer: { type: String, required: true },
+  note: { type: String, default: null },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  topicName: { type: String, required: true },
+  subtopicName: { type: String, required: true },
+  grade: { type: String, required: true },
 });
 
 const user = mongoose.model('user', {
   userInfo: {
     id: {
       type: Number,
+      default: null,
     },
     phoneNo: {
       type: String,
@@ -72,35 +72,44 @@ const user = mongoose.model('user', {
     },
     token: {
       type: String,
+      default: null,
     },
     name: {
       type: String,
+      default: null,
     },
     //1 unpaid , 2 for paid
     level: {
       type: Number,
+      default: 0,
     },
     grade: {
       type: Number,
+      required: true,
     },
     board: {
       type: String,
+      default: null,
     },
     image: {
       type: String,
+      default: null,
     },
     gender: {
       type: String,
+      default: null,
     },
     city: {
       type: String,
+      default: null,
     },
     state: {
       type: String,
+      default: null,
     },
   },
-  learnt: { type: [] },
-  practiced: { type: [] },
+  learnt: { type: Array, default: [] },
+  practiced: { type: Array, default: [] },
 });
 
 module.exports = {
