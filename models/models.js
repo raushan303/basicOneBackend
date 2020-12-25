@@ -71,7 +71,7 @@ const user = mongoose.model('user', {
       required: true,
     },
     token: {
-      type: Array,
+      type: String,
     },
     name: {
       type: String,
