@@ -9,8 +9,9 @@ const check = require('../middlewares/middleware');
 const router = new express.Router();
 
 //Fetch subject for the given grade
-router.get('/getSubjects/:grade', async (req, res) => {
-  let tup = await subject.find({ grade: req.params.grade });
+router.get('/getSubjects', async (req, res) => {
+  console.log(req.body,'params',req.params,req.Router,req.get,req.grade)
+  let tup = await subject.find({ grade: req.body.grade });
   res.send(tup);
 });
 

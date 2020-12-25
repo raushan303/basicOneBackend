@@ -62,8 +62,9 @@ const user = mongoose.model('user', {
     id: {
       type: Number,
     },
-    userName: {
+    phoneNo: {
       type: String,
+      required: true,
     },
     password: {
       type: String,
@@ -78,10 +79,6 @@ const user = mongoose.model('user', {
     //1 unpaid , 2 for paid
     level: {
       type: Number,
-    },
-    phoneNo: {
-      type: String,
-      required: true,
     },
     grade: {
       type: Number,
