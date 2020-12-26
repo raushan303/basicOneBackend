@@ -22,6 +22,12 @@ app.use(coursesRouter);
 const userRouter = require('./routers/user');
 app.use(userRouter);
 
+const addVideoRouter = require('./routers/addVideo');
+app.use(addVideoRouter);
+
+const userStatusRouter = require('./routers/userStaus');
+app.use(userStatusRouter);
+
 app.listen(port, function () {
   console.log('Started on PORT 3001');
 });
