@@ -3,10 +3,10 @@ const { subject } = require('../models/models');
 const { chapter } = require('../models/models');
 const { topic } = require('../models/models');
 const { subtopic } = require('../models/models');
-const check = require('../middlewares/middleware');
+const check = require('../middlewares/adminMiddleware');
 const router = new express.Router();
 
-router.post('/addSubtopic', async (req, res) => {
+router.post('/addSubtopic', check, async (req, res) => {
   try {
     const itm1 = new subtopic({
       id: req.body.id,
@@ -55,7 +55,6 @@ router.post('/addSubtopic', async (req, res) => {
         conceptCount: 1,
         videoCount: 1,
         videoMins: req.body.videoMins,
-        questionCount: 0,
       });
       cur = 1;
       await itm2.save();
@@ -92,7 +91,6 @@ router.post('/addSubtopic', async (req, res) => {
         topicCount: 1,
         videoCount: 1,
         videoMins: req.body.videoMins,
-        questionCount: 0,
       });
       cur = 1;
       await itm3.save();
@@ -125,7 +123,6 @@ router.post('/addSubtopic', async (req, res) => {
         chapterCount: 1,
         videoCount: 1,
         videoMins: req.body.videoMins,
-        questionCount: 0,
       });
       cur = 1;
       await itm4.save();

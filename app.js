@@ -16,16 +16,19 @@ app.use(session({ secret: SECRET_SESSION_KEY }));
 
 app.use(express.static(__dirname + '/public'));
 
-const coursesRouter = require('./routers/courses');
+const coursesRouter = require('./routers/getCoursesData');
 app.use(coursesRouter);
 
 const userRouter = require('./routers/user');
 app.use(userRouter);
 
-const addVideoRouter = require('./routers/addVideo');
+const addVideoRouter = require('./routers/postVideo');
 app.use(addVideoRouter);
 
-const userStatusRouter = require('./routers/userStaus');
+const addQuestionRouter = require('./routers/postQuestion');
+app.use(addQuestionRouter);
+
+const userStatusRouter = require('./routers/postUserActivity');
 app.use(userStatusRouter);
 
 app.listen(port, function () {
