@@ -13,8 +13,8 @@ async function check(req, res, next) {
     const token = req.header('authorization');
     const decoded = jwt.verify(token, SECRET_TOKEN_KEY);
     const tup = await user.findOne({ _id: decoded._id });
-    tup = tup.toObject();
-    if (tup.userInfo.level===0) {
+    // tup = tup.toObject();
+    if (tup.userInfo.level === 0) {
       req.session._id = decoded._id;
       next();
     } else {
@@ -25,7 +25,7 @@ async function check(req, res, next) {
   } catch (e) {
     res
       .status(404)
-      .json({ message: 'You are not authorized to view this page' });
+      .json({ message: 'You are not authorized to view this page!' });
   }
 }
 module.exports = check;

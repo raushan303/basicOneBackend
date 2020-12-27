@@ -7,6 +7,7 @@ const subject = mongoose.model('subject', {
   videoCount: { type: Number, default: 0 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
+  image: { type: String, default: null },
 });
 
 const chapter = mongoose.model('chapter', {
@@ -18,6 +19,7 @@ const chapter = mongoose.model('chapter', {
   videoCount: { type: Number, default: 0 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
+  image: { type: String, default: null },
 });
 
 const topic = mongoose.model('topic', {
@@ -30,6 +32,7 @@ const topic = mongoose.model('topic', {
   videoCount: { type: Number, default: 0 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
+  image: { type: String, default: null },
 });
 
 const subtopic = mongoose.model('subtopic', {
@@ -41,6 +44,8 @@ const subtopic = mongoose.model('subtopic', {
   subtopicName: { type: String, required: true },
   grade: { type: String, required: true },
   videoMins: { type: Number, required: true },
+  questionCount: { type: Number, default: 0 },
+  image: { type: String, default: null },
 });
 
 const question = mongoose.model('question', {

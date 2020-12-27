@@ -20,19 +20,21 @@ router.post('/addQuestion', check, async (req, res) => {
       res.send(null);
     }
 
-    const itm1 = new question({
-      id: req.body.id,
-      question: req.body.question,
-      options: req.body.options,
-      answer: req.body.answer,
-      note: req.body.note,
-      subjectName: req.body.subjectName,
-      chapterName: req.body.chapterName,
-      topicName: req.body.topicName,
-      subtopicName: req.body.subtopicName,
-      grade: req.body.grade,
-    });
+    const itm1 = new question(req.body);
     await itm1.save();
+
+    await subtopic.findOneAndUpdate(
+      {
+        subjectName: req.body.subjectName,
+        chapterName: req.body.chapterName,
+        topicName: req.body.topicName,
+        subtopicName: req.body.subtopicName,
+        grade: req.body.grade,
+      },
+      {
+        $inc: { questionCount: 1 },
+      }
+    );
 
     await topic.findOneAndUpdate(
       {
@@ -42,7 +44,7 @@ router.post('/addQuestion', check, async (req, res) => {
         grade: req.body.grade,
       },
       {
-        questionCount: topicObj.questionCount + 1,
+        $inc: { questionCount: 1 },
       }
     );
 
@@ -53,7 +55,7 @@ router.post('/addQuestion', check, async (req, res) => {
         grade: req.body.grade,
       },
       {
-        questionCount: chapterObj.questionCount + 1,
+        $inc: { questionCount: 1 },
       }
     );
 
@@ -63,7 +65,7 @@ router.post('/addQuestion', check, async (req, res) => {
         grade: req.body.grade,
       },
       {
-        questionCount: subjectObj.questionCount + 1,
+        $inc: { questionCount: 1 },
       }
     );
 

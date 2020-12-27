@@ -8,16 +8,8 @@ const router = new express.Router();
 
 router.post('/addSubtopic', check, async (req, res) => {
   try {
-    const itm1 = new subtopic({
-      id: req.body.id,
-      url: req.body.url,
-      subjectName: req.body.subjectName,
-      chapterName: req.body.chapterName,
-      topicName: req.body.topicName,
-      subtopicName: req.body.subtopicName,
-      grade: req.body.grade,
-      videoMins: req.body.videoMins,
-    });
+    const itm1 = new subtopic(req.body);
+
     await itm1.save();
 
     let cur = 0;
@@ -28,8 +20,6 @@ router.post('/addSubtopic', check, async (req, res) => {
       topicName: req.body.topicName,
       grade: req.body.grade,
     });
-
-    console.log(topicObj, 'topic');
 
     if (topicObj) {
       await topic.findOneAndUpdate(
@@ -46,16 +36,7 @@ router.post('/addSubtopic', check, async (req, res) => {
         }
       );
     } else {
-      const itm2 = new topic({
-        id: req.body.id,
-        subjectName: req.body.subjectName,
-        chapterName: req.body.chapterName,
-        topicName: req.body.topicName,
-        grade: req.body.grade,
-        conceptCount: 1,
-        videoCount: 1,
-        videoMins: req.body.videoMins,
-      });
+      const itm2 = new topic(req.body);
       cur = 1;
       await itm2.save();
     }
@@ -83,15 +64,7 @@ router.post('/addSubtopic', check, async (req, res) => {
       );
       cur = 0;
     } else {
-      const itm3 = new chapter({
-        id: req.body.id,
-        subjectName: req.body.subjectName,
-        chapterName: req.body.chapterName,
-        grade: req.body.grade,
-        topicCount: 1,
-        videoCount: 1,
-        videoMins: req.body.videoMins,
-      });
+      const itm3 = new chapter(req.body);
       cur = 1;
       await itm3.save();
     }
@@ -116,14 +89,7 @@ router.post('/addSubtopic', check, async (req, res) => {
       );
       cur = 0;
     } else {
-      const itm4 = new subject({
-        id: req.body.id,
-        subjectName: req.body.subjectName,
-        grade: req.body.grade,
-        chapterCount: 1,
-        videoCount: 1,
-        videoMins: req.body.videoMins,
-      });
+      const itm4 = new subject(req.body);
       cur = 1;
       await itm4.save();
     }
