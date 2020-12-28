@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
 async function check(req, res, next) {
   try {
-    const token = req.header('authorization');
+    const token = req.header('Authorization');
     const decoded = jwt.verify(token, SECRET_TOKEN_KEY);
     const tup = await user.findOne({ _id: decoded._id });
     // tup = tup.toObject();
