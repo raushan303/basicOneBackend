@@ -9,15 +9,15 @@ const check = require('../middlewares/userMiddleware');
 const router = new express.Router();
 
 //Fetch subject for the given grade
-router.get('/getSubjects/:grade', check, async (req, res) => {
-  let tup = await subject.find({ grade: req.params.grade });
+router.get('/getSubjects', check, async (req, res) => {
+  let tup = await subject.find({ grade: req.session.grade });
   res.send(tup);
 });
 
-router.get('/getSubjectStat/:grade/:subject', check, async (req, res) => {
+router.get('/getSubjectStat/:subject', check, async (req, res) => {
   try {
     let tup = await subject.findOne({
-      grade: req.params.grade,
+      grade: req.session.grade,
       subjectName: req.params.subject,
     });
     tup = tup.toObject();
@@ -46,10 +46,10 @@ router.get('/getSubjectStat/:grade/:subject', check, async (req, res) => {
 });
 
 //Fetch chapter of the given subject
-router.get('/getChapters/:grade/:subject', check, async (req, res) => {
+router.get('/getChapters/:subject', check, async (req, res) => {
   try {
     let tup = await chapter.find({
-      grade: req.params.grade,
+      grade: req.session.grade,
       subjectName: req.params.subject,
     });
 
@@ -89,10 +89,10 @@ router.get('/getChapters/:grade/:subject', check, async (req, res) => {
 });
 
 //Fetch topic of the given subject
-router.get('/getTopics/:grade/:subject/:chapter', check, async (req, res) => {
+router.get('/getTopics/:subject/:chapter', check, async (req, res) => {
   try {
     let tup = await topic.find({
-      grade: req.params.grade,
+      grade: req.session.grade,
       subjectName: req.params.subject,
       chapterName: req.params.chapter,
     });
@@ -136,12 +136,12 @@ router.get('/getTopics/:grade/:subject/:chapter', check, async (req, res) => {
 });
 
 router.get(
-  '/getSubtopics/:grade/:subject/:chapter/:topic',
+  '/getSubtopics/:subject/:chapter/:topic',
   check,
   async (req, res) => {
     try {
       let tup = await subtopic.find({
-        grade: req.params.grade,
+        grade: req.session.grade,
         subjectName: req.params.subject,
         chapterName: req.params.chapter,
         topicName: req.params.topic,

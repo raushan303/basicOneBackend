@@ -14,7 +14,8 @@ async function check(req, res, next) {
     const decoded = jwt.verify(token, SECRET_TOKEN_KEY);
     const tup = await user.findOne({ _id: decoded._id });
     if (tup) {
-      req.session._id=decoded._id;
+      req.session._id = decoded._id;
+      req.session.grade = tup.userInfo.grade;
       next();
     } else {
       res

@@ -38,6 +38,7 @@ const topic = mongoose.model('topic', {
 const subtopic = mongoose.model('subtopic', {
   id: { type: String, default: null },
   url: { type: String, required: true },
+  note: { type: String, default: null },
   subjectName: { type: String, required: true },
   chapterName: { type: String, required: true },
   topicName: { type: String, required: true },
@@ -46,7 +47,19 @@ const subtopic = mongoose.model('subtopic', {
   videoMins: { type: Number, required: true },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
+  comment: { type: Array, default: [] },
 });
+
+/* 
+  comment array
+  comment:[
+    {
+      author:{},
+      question:{},
+      reply:[{},{}]
+    }
+  ]
+*/
 
 const question = mongoose.model('question', {
   id: { type: String, default: null },
@@ -83,7 +96,6 @@ const user = mongoose.model('user', {
       type: String,
       default: null,
     },
-    //1 unpaid , 2 for paid
     level: {
       type: Number,
       default: 0,
@@ -115,7 +127,42 @@ const user = mongoose.model('user', {
   },
   learnt: { type: Array, default: [] },
   practiced: { type: Array, default: [] },
+  comment: { type: Array, default: [] },
 });
+
+/* 
+  comment array
+  comment:[
+    {
+      author:{},
+      question:{},
+      subtopic:{},
+      reply:[{},{}]
+    }
+  ]
+*/
+
+/*
+  learnt Array
+  learnt:[
+    {
+      subtopic:{},
+      currentTime:Int,
+      learnt:Int
+    }
+  ]
+*/
+
+/*
+  practiced Array
+  practiced:[
+    {
+      question:{},
+      accuracy:Int(1 or 0)
+    }
+  ]
+*/
+
 
 module.exports = {
   subject: subject,

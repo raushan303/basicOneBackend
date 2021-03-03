@@ -7,7 +7,7 @@ const { SECRET_TOKEN_KEY } = require('../SECRET_KEYS');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     let tup = await user.findOne({
       'userInfo.phoneNo': req.body.phoneNo,
@@ -33,7 +33,7 @@ router.get('/login', async (req, res) => {
   }
 });
 
-router.get('/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
   let tup = await user.findOne({ 'userInfo.phoneNo': req.body.phoneNo });
   res.send(tup);
 });
