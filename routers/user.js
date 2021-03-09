@@ -26,32 +26,56 @@ router.post('/login', async (req, res) => {
           'userInfo.token': token,
         }
       );
+      res.send({ user: tup, exist: true });
+    } else {
+      res.send({ user: null, exist: false });
     }
-    res.send(tup);
   } catch (e) {
-    res.send(null);
+    res.send({ user: null, exist: false });
   }
 });
 
 router.post('/signup', async (req, res) => {
   let tup = await user.findOne({ 'userInfo.phoneNo': req.body.phoneNo });
-  res.send(tup);
+  if (tup) {
+    res.send({ exist: true });
+  } else {
+    res.send({ exist: false });
+  }
 });
 
 router.post('/register', async (req, res) => {
   try {
     const tup = new user({
-      userInfo: req.body.userInfo,
+      userInfo: req.body,
       learnt: [],
       practiced: [],
     });
-    // console.log(tup, req.body.userInfo, 'hi');
     const token = jwt.sign({ _id: tup._id.toString() }, SECRET_TOKEN_KEY);
     tup.userInfo.token = token;
+    let tup2 = await user.findOne({ id: -1 });
+    tup2 = tup2.toObject();
+    tup.userInfo.id = tup2.count;
+    await user.findOneAndUpdate({ id: -1 }, { $inc: { count: 1 } });
     await tup.save();
-    res.send(tup);
+    res.send({ user: tup, success: true });
   } catch (e) {
-    res.send(null);
+    res.send({ user: null, success: false });
+  }
+});
+
+router.get('/showUser', async (req, res) => {
+  try {
+    const token = req.header('Authorization');
+    const decoded = jwt.verify(token, SECRET_TOKEN_KEY);
+    const tup = await user.findOne({ _id: decoded._id });
+    if (tup) {
+      res.send({ user: tup, exist: true });
+    } else {
+      res.send({ user: null, exist: false });
+    }
+  } catch (e) {
+    res.send({ user: null, exist: false });
   }
 });
 

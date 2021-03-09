@@ -12,6 +12,8 @@ router.post('/addSubtopic', check, async (req, res) => {
 
     await itm1.save();
 
+    await subtopic.findOneAndUpdate({ id: -1 }, { $inc: { count: 1 } });
+
     let cur = 0;
 
     const topicObj = await topic.findOne({
@@ -97,6 +99,15 @@ router.post('/addSubtopic', check, async (req, res) => {
     res.send(itm1);
   } catch (e) {
     res.send(null);
+  }
+});
+
+router.get('/getVideoId', check, async (req, res) => {
+  try {
+    const itm = await subtopic.findOne({ id : -1 });
+    res.send(itm);
+  } catch (e) {
+    res.send('error');
   }
 });
 

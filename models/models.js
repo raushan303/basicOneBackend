@@ -36,7 +36,8 @@ const topic = mongoose.model('topic', {
 });
 
 const subtopic = mongoose.model('subtopic', {
-  id: { type: String, default: null },
+  authorId: { type: Number, required: true },
+  id: { type: Number, required: true },
   url: { type: String, required: true },
   note: { type: String, default: null },
   subjectName: { type: String, required: true },
@@ -78,7 +79,7 @@ const user = mongoose.model('user', {
   userInfo: {
     id: {
       type: Number,
-      default: null,
+      default: 0,
     },
     phoneNo: {
       type: String,
@@ -101,7 +102,7 @@ const user = mongoose.model('user', {
       default: 0,
     },
     grade: {
-      type: Number,
+      type: String,
       required: true,
     },
     board: {
@@ -124,6 +125,9 @@ const user = mongoose.model('user', {
       type: String,
       default: null,
     },
+  },
+  count: {
+    type: Number,
   },
   learnt: { type: Array, default: [] },
   practiced: { type: Array, default: [] },
@@ -162,7 +166,6 @@ const user = mongoose.model('user', {
     }
   ]
 */
-
 
 module.exports = {
   subject: subject,
