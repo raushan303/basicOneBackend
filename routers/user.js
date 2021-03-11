@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
       'userInfo.phoneNo': req.body.phoneNo,
       'userInfo.password': req.body.password,
     });
-    console.log(tup);
+    // console.log(tup);
     if (tup) {
       const token = jwt.sign({ _id: tup._id.toString() }, SECRET_TOKEN_KEY);
       tup.userInfo.token = token;
@@ -53,10 +53,10 @@ router.post('/register', async (req, res) => {
     });
     const token = jwt.sign({ _id: tup._id.toString() }, SECRET_TOKEN_KEY);
     tup.userInfo.token = token;
-    let tup2 = await user.findOne({ id: -1 });
+    let tup2 = await user.findOne({ userId: -1 });
     tup2 = tup2.toObject();
-    tup.userInfo.id = tup2.count;
-    await user.findOneAndUpdate({ id: -1 }, { $inc: { count: 1 } });
+    tup.userInfo.userId = tup2.count;
+    await user.findOneAndUpdate({ userId: -1 }, { $inc: { count: 1 } });
     await tup.save();
     res.send({ user: tup, success: true });
   } catch (e) {

@@ -11,8 +11,8 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 
 app.use(express.json());
-const fileUpload = require('express-fileupload');
-app.use(fileUpload());
+// const fileUpload = require('express-fileupload');
+// app.use(fileUpload());
 // app.use(uploadRouter)
 
 var session = require('express-session');

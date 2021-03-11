@@ -1,54 +1,67 @@
 const mongoose = require('mongoose');
+
 const subject = mongoose.model('subject', {
-  id: { type: String, default: null },
+  subjectId: { type: Number, required: true },
   subjectName: { type: String, required: true },
   grade: { type: String, required: true },
-  chapterCount: { type: Number, default: 0 },
-  videoCount: { type: Number, default: 0 },
+  chapterCount: { type: Number, default: 1 },
+  videoCount: { type: Number, default: 1 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
+  count: {
+    type: Number,
+  },
 });
 
 const chapter = mongoose.model('chapter', {
-  id: { type: String, default: null },
-  subjectName: { type: String, required: true },
+  chapterId: { type: Number, required: true },
+  subjectId: { type: Number, required: true },
   chapterName: { type: String, required: true },
   grade: { type: String, required: true },
-  topicCount: { type: Number, default: 0 },
-  videoCount: { type: Number, default: 0 },
+  topicCount: { type: Number, default: 1 },
+  videoCount: { type: Number, default: 1 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
+  count: {
+    type: Number,
+  },
 });
 
 const topic = mongoose.model('topic', {
-  id: { type: String, default: null },
-  subjectName: { type: String, required: true },
-  chapterName: { type: String, required: true },
+  topicId: { type: Number, required: true },
+  subjectId: { type: Number, required: true },
+  chapterId: { type: Number, required: true },
   topicName: { type: String, required: true },
   grade: { type: String, required: true },
-  conceptCount: { type: Number, default: 0 },
-  videoCount: { type: Number, default: 0 },
+  conceptCount: { type: Number, default: 1 },
+  videoCount: { type: Number, default: 1 },
   videoMins: { type: Number, default: 0 },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
+  count: {
+    type: Number,
+  },
 });
 
 const subtopic = mongoose.model('subtopic', {
   authorId: { type: Number, required: true },
-  id: { type: Number, required: true },
+  subtopicId: { type: Number, required: true },
+  subjectId: { type: Number, required: true },
+  chapterId: { type: Number, required: true },
+  topicId: { type: Number, required: true },
   url: { type: String, required: true },
   note: { type: String, default: null },
-  subjectName: { type: String, required: true },
-  chapterName: { type: String, required: true },
-  topicName: { type: String, required: true },
   subtopicName: { type: String, required: true },
   grade: { type: String, required: true },
   videoMins: { type: Number, required: true },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
   comment: { type: Array, default: [] },
+  count: {
+    type: Number,
+  },
 });
 
 /* 
@@ -63,7 +76,7 @@ const subtopic = mongoose.model('subtopic', {
 */
 
 const question = mongoose.model('question', {
-  id: { type: String, default: null },
+  questionId: { type: Number, required: true },
   question: { type: String, required: true },
   options: { type: Array, required: true },
   answer: { type: String, required: true },
@@ -77,7 +90,7 @@ const question = mongoose.model('question', {
 
 const user = mongoose.model('user', {
   userInfo: {
-    id: {
+    userId: {
       type: Number,
       default: 0,
     },

@@ -9,27 +9,26 @@ const check = require('../middlewares/userMiddleware');
 const router = new express.Router();
 
 //Fetch subject for the given grade
-router.get('/getSubjects', check, async (req, res) => {
-  let tup = await subject.find({ grade: req.session.grade });
+router.get('/getSubjects/:grade', check, async (req, res) => {
+  let tup = await subject.find({ grade: req.params.grade });
   res.send(tup);
 });
 
-router.get('/getSubjectStat/:subject', check, async (req, res) => {
+router.get('/getSubjectStat/:subjectId', check, async (req, res) => {
   try {
     let tup = await subject.findOne({
-      grade: req.session.grade,
-      subjectName: req.params.subject,
+      subjectId: req.params.subjectId,
     });
     tup = tup.toObject();
     tup.learnt = 0;
     tup.practiced = 0;
     let tup2 = await user.findOne(
       {
-        _id: req.session._id,
+        'userInfo.userId': req.session.userId,
       },
       {
-        learnt: { $elemMatch: { subjectName: req.params.subject } },
-        practiced: { $elemMatch: { subjectName: req.params.subject } },
+        learnt: { $elemMatch: { subjectId: req.params.subjectId } },
+        practiced: { $elemMatch: { subjectId: req.params.subjectId } },
       }
     );
     tup2 = tup2.toObject();
@@ -46,26 +45,24 @@ router.get('/getSubjectStat/:subject', check, async (req, res) => {
 });
 
 //Fetch chapter of the given subject
-router.get('/getChapters/:subject', check, async (req, res) => {
+router.get('/getChapters/:subjectId', check, async (req, res) => {
   try {
     let tup = await chapter.find({
-      grade: req.session.grade,
-      subjectName: req.params.subject,
+      subjectId: req.params.subjectId,
     });
 
     let tup2 = await user.findOne({
-      _id: req.session._id,
+      'userInfo.userId': req.session.userId,
     });
+
+    console.log(tup2,req.session.userId)
 
     tup2 = tup2.toObject();
     tup.forEach((chapter, i) => {
       tup[i] = tup[i].toObject();
       tup[i].learnt = 0;
       tup2.learnt.forEach((obj) => {
-        if (
-          obj.subjectName === req.params.subject &&
-          obj.chapterName === chapter.chapterName
-        ) {
+        if (obj.chapterId === chapter.chapterId) {
           tup[i].learnt += obj.learnt;
         }
       });
@@ -74,10 +71,7 @@ router.get('/getChapters/:subject', check, async (req, res) => {
     tup.forEach((chapter, i) => {
       tup[i].practiced = 0;
       tup2.practiced.forEach((obj) => {
-        if (
-          obj.subjectName === req.params.subject &&
-          obj.chapterName === chapter.chapterName
-        ) {
+        if (obj.chapterId === chapter.chapterId) {
           tup[i].practiced += 1;
         }
       });
@@ -89,16 +83,14 @@ router.get('/getChapters/:subject', check, async (req, res) => {
 });
 
 //Fetch topic of the given subject
-router.get('/getTopics/:subject/:chapter', check, async (req, res) => {
+router.get('/getTopics/:chapterId', check, async (req, res) => {
   try {
     let tup = await topic.find({
-      grade: req.session.grade,
-      subjectName: req.params.subject,
-      chapterName: req.params.chapter,
+      chapterId: req.params.chapterId,
     });
 
     let tup2 = await user.findOne({
-      _id: req.session._id,
+      'userInfo.userId': req.session.userId,
     });
 
     tup2 = tup2.toObject();
@@ -107,11 +99,7 @@ router.get('/getTopics/:subject/:chapter', check, async (req, res) => {
       tup[i] = tup[i].toObject();
       tup[i].learnt = 0;
       tup2.learnt.forEach((obj) => {
-        if (
-          obj.subjectName === req.params.subject &&
-          obj.chapterName === req.params.chapter &&
-          obj.topicName === topic.topicName
-        ) {
+        if (obj.topicId === topic.topicId) {
           tup[i].learnt += obj.learnt;
         }
       });
@@ -120,11 +108,7 @@ router.get('/getTopics/:subject/:chapter', check, async (req, res) => {
     tup.forEach((topic, i) => {
       tup[i].practiced = 0;
       tup2.practiced.forEach((obj) => {
-        if (
-          obj.subjectName === req.params.subject &&
-          obj.chapterName === req.params.chapter &&
-          obj.topicName === topic.topicName
-        ) {
+        if (obj.topicId === topic.topicId) {
           tup[i].practiced += 1;
         }
       });
@@ -135,44 +119,32 @@ router.get('/getTopics/:subject/:chapter', check, async (req, res) => {
   }
 });
 
-router.get(
-  '/getSubtopics/:subject/:chapter/:topic',
-  check,
-  async (req, res) => {
-    try {
-      let tup = await subtopic.find({
-        grade: req.session.grade,
-        subjectName: req.params.subject,
-        chapterName: req.params.chapter,
-        topicName: req.params.topic,
+router.get('/getSubtopics/:topicId', check, async (req, res) => {
+  try {
+    let tup = await subtopic.find({
+      topicId: req.params.topicId,
+    });
+
+    let tup2 = await user.findOne({
+      'userInfo.userId': req.session.userId,
+    });
+
+    tup2 = tup2.toObject();
+
+    tup.forEach((subtopic, i) => {
+      tup[i] = tup[i].toObject();
+      tup[i].curTime = 0;
+      tup2.learnt.forEach((obj) => {
+        if (obj.subtopicId === subtopic.subtopicId) {
+          tup[i].curTime = obj.curTime;
+        }
       });
+    });
 
-      let tup2 = await user.findOne({
-        _id: req.session._id,
-      });
-
-      tup2 = tup2.toObject();
-
-      tup.forEach((subtopic, i) => {
-        tup[i] = tup[i].toObject();
-        tup[i].curTime = 0;
-        tup2.learnt.forEach((obj) => {
-          if (
-            obj.subjectName === req.params.subject &&
-            obj.chapterName === req.params.chapter &&
-            obj.topicName === req.params.topic &&
-            obj.subtopicName === subtopic.subtopicName
-          ) {
-            tup[i].curTime = obj.curTime;
-          }
-        });
-      });
-
-      res.send(tup);
-    } catch (e) {
-      res.send(null);
-    }
+    res.send(tup);
+  } catch (e) {
+    res.send(null);
   }
-);
+});
 
 module.exports = router;

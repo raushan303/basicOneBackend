@@ -3,108 +3,104 @@ const { subject } = require('../models/models');
 const { chapter } = require('../models/models');
 const { topic } = require('../models/models');
 const { subtopic } = require('../models/models');
-const check = require('../middlewares/adminMiddleware');
+const check = require('../middlewares/userMiddleware');
 const router = new express.Router();
 
 router.post('/addSubtopic', check, async (req, res) => {
   try {
-    const itm1 = new subtopic(req.body);
+    let authorId, subtopicId, topicId, chapterId, subjectId, tmpObj;
 
-    await itm1.save();
+    tmpObj = await subtopic.findOneAndUpdate({ subtopicId: -1 }, { $inc: { count: 1 } });
 
-    await subtopic.findOneAndUpdate({ id: -1 }, { $inc: { count: 1 } });
+    tmpObj = tmpObj.toObject();
+
+    subtopicId = tmpObj.count;
+
+    if (req.body.topicId !== null) {
+      topicId = req.body.topicId;
+    } else {
+      tmpObj = await topic.findOneAndUpdate({ topicId: -1 }, { $inc: { count: 1 } });
+      tmpObj = tmpObj.toObject();
+      topicId = tmpObj.count;
+    }
+
+    if (req.body.chapterId !== null) {
+      chapterId = req.body.chapterId;
+    } else {
+      tmpObj = await chapter.findOneAndUpdate({ chapterId: -1 }, { $inc: { count: 1 } });
+      tmpObj = tmpObj.toObject();
+      chapterId = tmpObj.count;
+    }
+
+    if (req.body.subjectId !== null) {
+      subjectId = req.body.subjectId;
+    } else {
+      tmpObj = await subject.findOneAndUpdate({ subjectId: -1 }, { $inc: { count: 1 } });
+      tmpObj = tmpObj.toObject();
+      subjectId = tmpObj.count;
+    }
 
     let cur = 0;
+    authorId = req.session.userId;
+    const itm1 = new subtopic({ ...req.body, authorId, subtopicId, topicId, chapterId, subjectId });
+    await itm1.save();
 
-    const topicObj = await topic.findOne({
-      subjectName: req.body.subjectName,
-      chapterName: req.body.chapterName,
-      topicName: req.body.topicName,
-      grade: req.body.grade,
-    });
-
-    if (topicObj) {
+    if (req.body.topicId !== null) {
       await topic.findOneAndUpdate(
         {
-          subjectName: req.body.subjectName,
-          chapterName: req.body.chapterName,
-          topicName: req.body.topicName,
-          grade: req.body.grade,
+          topicId: req.body.topicId,
         },
         {
-          conceptCount: topicObj.conceptCount + 1,
-          videoCount: topicObj.videoCount + 1,
-          videoMins: topicObj.videoMins + req.body.videoMins,
+          $inc: { conceptCount: 1, videoCount: 1, videoMins: req.body.videoMins },
         }
       );
     } else {
-      const itm2 = new topic(req.body);
-      cur = 1;
+      const itm2 = new topic({ ...req.body, topicId, chapterId, subjectId });
       await itm2.save();
+      cur = 1;
     }
 
-    const chapterObj = await chapter.findOne({
-      subjectName: req.body.subjectName,
-      chapterName: req.body.chapterName,
-      grade: req.body.grade,
-    });
-
-    console.log(chapterObj, 'chap');
-
-    if (chapterObj) {
+    if (req.body.chapterId !== null) {
       await chapter.findOneAndUpdate(
         {
-          subjectName: req.body.subjectName,
-          chapterName: req.body.chapterName,
-          grade: req.body.grade,
+          chapterId: req.body.chapterId,
         },
         {
-          topicCount: chapterObj.topicCount + cur,
-          videoCount: chapterObj.videoCount + 1,
-          videoMins: chapterObj.videoMins + req.body.videoMins,
+          $inc: { topicCount: cur, videoCount: 1, videoMins: req.body.videoMins },
         }
       );
       cur = 0;
     } else {
-      const itm3 = new chapter(req.body);
-      cur = 1;
+      const itm3 = new chapter({ ...req.body, chapterId, subjectId });
       await itm3.save();
+      cur = 1;
     }
 
-    const subjectObj = await subject.findOne({
-      subjectName: req.body.subjectName,
-      grade: req.body.grade,
-    });
-
-    console.log(subjectObj, 'sub');
-    if (subjectObj) {
+    if (req.body.subjectId !== null) {
       await subject.findOneAndUpdate(
         {
-          subjectName: req.body.subjectName,
-          grade: req.body.grade,
+          subjectId: req.body.subjectId,
         },
         {
-          chapterCount: subjectObj.chapterCount + cur,
-          videoCount: subjectObj.videoCount + 1,
-          videoMins: subjectObj.videoMins + req.body.videoMins,
+          $inc: { chapterCount: cur, videoCount: 1, videoMins: req.body.videoMins },
         }
       );
       cur = 0;
     } else {
-      const itm4 = new subject(req.body);
-      cur = 1;
+      const itm4 = new subject({ ...req.body, subjectId });
       await itm4.save();
+      cur = 1;
     }
 
-    res.send(itm1);
+    res.send({ subtopic: itm1, success: true });
   } catch (e) {
-    res.send(null);
+    res.send({ subtopic: null, success: false, error: e });
   }
 });
 
 router.get('/getVideoId', check, async (req, res) => {
   try {
-    const itm = await subtopic.findOne({ id : -1 });
+    const itm = await subtopic.findOne({ subtopicId: -1 });
     res.send(itm);
   } catch (e) {
     res.send('error');
