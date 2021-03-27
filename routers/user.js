@@ -66,6 +66,7 @@ router.post('/register', async (req, res) => {
 
 router.get('/showUser', async (req, res) => {
   try {
+    console.log('hello','123')
     const token = req.header('Authorization');
     const decoded = jwt.verify(token, SECRET_TOKEN_KEY);
     const tup = await user.findOne({ _id: decoded._id });

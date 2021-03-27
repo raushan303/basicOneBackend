@@ -17,6 +17,7 @@ async function check(req, res, next) {
       req.session._id = decoded._id;
       req.session.grade = tup.userInfo.grade;
       req.session.userId = tup.userInfo.userId;
+      req.session.userInfo = tup.userInfo;
       next();
     } else {
       res.status(404).json({ message: 'You are not authorized to view this page' });

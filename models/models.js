@@ -17,6 +17,7 @@ const subject = mongoose.model('subject', {
 const chapter = mongoose.model('chapter', {
   chapterId: { type: Number, required: true },
   subjectId: { type: Number, required: true },
+  subjectName: { type: String, required: true },
   chapterName: { type: String, required: true },
   grade: { type: String, required: true },
   topicCount: { type: Number, default: 1 },
@@ -33,6 +34,8 @@ const topic = mongoose.model('topic', {
   topicId: { type: Number, required: true },
   subjectId: { type: Number, required: true },
   chapterId: { type: Number, required: true },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
   topicName: { type: String, required: true },
   grade: { type: String, required: true },
   conceptCount: { type: Number, default: 1 },
@@ -51,14 +54,16 @@ const subtopic = mongoose.model('subtopic', {
   subjectId: { type: Number, required: true },
   chapterId: { type: Number, required: true },
   topicId: { type: Number, required: true },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  topicName: { type: String, required: true },
+  subtopicName: { type: String, required: true },
   url: { type: String, required: true },
   note: { type: String, default: null },
-  subtopicName: { type: String, required: true },
   grade: { type: String, required: true },
   videoMins: { type: Number, required: true },
   questionCount: { type: Number, default: 0 },
   image: { type: String, default: null },
-  comment: { type: Array, default: [] },
   count: {
     type: Number,
   },
@@ -147,6 +152,48 @@ const user = mongoose.model('user', {
   comment: { type: Array, default: [] },
 });
 
+const comment = mongoose.model('comment', {
+  subtopicId: { type: Number, required: true },
+  commentId: { type: Number, required: true },
+  userId: { type: Number, required: true },
+  likeCount: { type: Number, default: 0 },
+  disLikeCount: { type: Number, default: 0 },
+  replyCount: { type: Number, default: 0 },
+  imageList: { type: Array, default: [] },
+  date: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  priority: { type: Number, default: 0 },
+  userLikeStatus: { type: Array, default: [] },
+  count: {
+    type: Number,
+  },
+});
+
+const reply = mongoose.model('reply', {
+  subtopicId: { type: Number, required: true },
+  commentId: { type: Number, required: true },
+  replyId: { type: Number, required: true },
+  userId: { type: Number, required: true },
+  likeCount: { type: Number, default: 0 },
+  disLikeCount: { type: Number, default: 0 },
+  imageList: { type: Array, default: [] },
+  date: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  priority: { type: Number, default: 0 },
+  userLikeStatus: { type: Array, default: [] },
+  count: {
+    type: Number,
+  },
+});
+
+const userCommentStatus = mongoose.model('commentStatus', {
+  userId: { type: Number, required: true },
+  liked: { type: Number, default: 0 },
+  disLiked: { type: Number, default: 0 },
+});
+
 /* 
   comment array
   comment:[
@@ -158,6 +205,20 @@ const user = mongoose.model('user', {
     }
   ]
 */
+
+const watchedSubtopic = mongoose.model('watchedSubtopic', {
+  subtopicId: { type: Number, required: true },
+  subjectId: { type: Number, required: true },
+  chapterId: { type: Number, required: true },
+  topicId: { type: Number, required: true },
+  subjectName: { type: String, required: true },
+  chapterName: { type: String, required: true },
+  topicName: { type: String, required: true },
+  subtopicName: { type: String, required: true },
+  videoMins: { type: Number, required: true },
+  currentTime: { type: Number, default: 0 },
+  learntTime: { type: Number, default: 0 },
+});
 
 /*
   learnt Array
@@ -187,4 +248,8 @@ module.exports = {
   subtopic: subtopic,
   question: question,
   user: user,
+  watchedSubtopic: watchedSubtopic,
+  comment: comment,
+  reply: reply,
+  userCommentStatus: userCommentStatus,
 };

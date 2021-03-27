@@ -1,5 +1,6 @@
 const express = require('express');
 const { user } = require('../models/models');
+const { watchedSubtopic } = require('../models/models');
 
 const check = require('../middlewares/userMiddleware');
 const router = new express.Router();
@@ -7,27 +8,21 @@ const router = new express.Router();
 router.post('/addLearn', check, async (req, res) => {
   try {
     let tup1 = await user.update(
-      { _id: req.session._id },
-      { $pull: { learnt: { _id: req.body._id } } }
+      { 'userInfo.userId': req.session.userId },
+      { $pull: { learnt: { subtopicId: req.body.subtopicId } } }
     );
-    let tup2 = await user.update(
-      { _id: req.session._id },
-      { $push: { learnt: req.body } }
-    );
-    console.log(tup1, tup2);
+    const newObj = new watchedSubtopic(req.body);
+    await user.update({ 'userInfo.userId': req.session.userId }, { $push: { learnt: newObj } });
 
-    res.send(tup2);
+    res.send({ data: newObj, success: true });
   } catch (e) {
-    res.send(null);
+    res.send({ data: null, success: false });
   }
 });
 
 router.post('/addPractice', check, async (req, res) => {
   try {
-    let tup = await user.update(
-      { _id: req.session._id },
-      { $push: { practiced: req.body } }
-    );
+    let tup = await user.update({ _id: req.session._id }, { $push: { practiced: req.body } });
     res.send(tup);
   } catch (e) {
     res.send(null);

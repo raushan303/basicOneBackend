@@ -23,6 +23,12 @@ app.use(express.static(__dirname + '/public'));
 const coursesRouter = require('./routers/getCoursesData');
 app.use(coursesRouter);
 
+const coursesStats = require('./routers/getCoursesStats');
+app.use(coursesStats);
+
+const coursesByAuthorRouter = require('./routers/geCoursesByAuthor');
+app.use(coursesByAuthorRouter);
+
 const userRouter = require('./routers/user');
 app.use(userRouter);
 
@@ -34,6 +40,12 @@ app.use(addQuestionRouter);
 
 const userStatusRouter = require('./routers/postUserActivity');
 app.use(userStatusRouter);
+
+const editRoute = require('./routers/editRoute');
+app.use(editRoute);
+
+const commentRoute = require('./routers/getComment');
+app.use(commentRoute);
 
 app.listen(port, function () {
   console.log('Started on PORT 3001');
