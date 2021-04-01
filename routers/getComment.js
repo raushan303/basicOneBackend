@@ -78,11 +78,11 @@ router.post('/deleteComments', check, async (req, res) => {
 
 router.post('/editComments', check, async (req, res) => {
   try {
-    let tup = await comment.findOneAndUpdate(
+    await comment.findOneAndUpdate(
       { commentId: req.body.commentId },
       { title: req.body.title, description: req.body.description, imageList: req.body.imageList }
     );
-    res.send({ data: tup, success: true });
+    res.send({ data: req.body, success: true });
   } catch (e) {
     res.send({ data: null, success: false, error: e });
   }
@@ -130,7 +130,7 @@ router.post('/updateCommentLikeStatus', check, async (req, res) => {
         { $inc: { disLikeCount: changeDisLike } }
       );
 
-    res.send({ data: newObj, success: true });
+    res.send({ data: req.body, success: true });
   } catch (e) {
     res.send({ data: null, success: false, error: e });
   }
@@ -199,11 +199,11 @@ router.post('/uploadReply', check, async (req, res) => {
 
 router.post('/editReply', check, async (req, res) => {
   try {
-    let tup = await reply.findOneAndUpdate(
+    await reply.findOneAndUpdate(
       { replyId: req.body.replyId },
       { title: req.body.title, description: req.body.description, imageList: req.body.imageList }
     );
-    res.send({ data: tup, success: true });
+    res.send({ data: req.body, success: true });
   } catch (e) {
     res.send({ data: null, success: false, error: e });
   }
@@ -212,6 +212,7 @@ router.post('/editReply', check, async (req, res) => {
 router.post('/deleteReply', check, async (req, res) => {
   try {
     let tup = await reply.findOneAndDelete({ replyId: req.body.replyId });
+    await comment.findOneAndUpdate({ commentId: req.body.commentId }, { $inc: { replyCount: -1 } });
     res.send({ data: tup, success: true });
   } catch (e) {
     res.send({ data: null, success: false, error: e });
@@ -261,7 +262,7 @@ router.post('/updateReplyLikeStatus', check, async (req, res) => {
         { $inc: { disLikeCount: changeDisLike } }
       );
 
-    res.send({ data: newObj, success: true });
+    res.send({ data: req.body, success: true });
   } catch (e) {
     res.send({ data: null, success: false, error: e });
   }
